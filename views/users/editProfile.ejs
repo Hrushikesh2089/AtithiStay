@@ -1,0 +1,51 @@
+<!-- THIS IS EDIT ROUTE THROUGH WHICH WE CAN EDIT THE LISTINGS -->
+
+<!-- BOILERPLATE FOR NAVBAR, BODY AND FOOTER -->
+<% layout("/layouts/boilerplate") %>
+<%- include("../includes/flash.ejs") %>
+
+<div class="container">
+
+    <div class="row mt-3">
+        <div class="col-lg-8 col-md-10 col-sm 12 offset-lg-2 offset-md-1 offset-sm-20">
+            <h3>Edit your Profile</h3>
+    
+            <!-- EDIT FORM -->
+            <form method="POST" action="/profile/<%= currUser._id %>?_method=PUT" novalidate class="needs-validation" enctype="multipart/form-data">
+            
+                <!-- USER NAME -->
+                <div class="mb-3">
+                    <lable for="username" class="form-label">User Name</lable>
+                    <input name="currUser[username]" value="<%= currUser.username %>" type="text" class="form-control" id="username">
+                </div>
+    
+                <!-- USER EMAIL -->
+                <div class="mb-3">
+                    <lable for="email" class="form-label">Email</lable>
+                    <input name="currUser[email]" value="<%= currUser.email %>" type="email" class="form-control" id="email">
+                </div>
+    
+                <!-- USER PHONE NUMBER -->
+                <div class="mb-3">
+                    <lable for="ownerContact" class="form-label">Phone number</lable>
+                    <input name="currUser[ownerContact]" value="<%= currUser.ownerContact %>" type="number" class="form-control" id="ownerContact" placeholder="Enter your 10 digit phone number">
+                </div>
+    
+                <!-- USER BIO -->
+                <div class="mb-3">
+                    <lable for="ownerBio" class="form-label">Bio (Write something about your hosting details)</lable>
+                    <input name="currUser[ownerBio]" value="<%= currUser.ownerBio %>" type="text" class="form-control" id="ownerBio" placeholder="Enter some Eye-catching bio">
+                </div>
+                
+                <!-- UPLOAD IMAGE -->
+                <div class="mb-3">
+                    <lable for="image" class="form-label">Upload New Profile Image</lable>
+                    <input name="currUser[image]" type="file" class="form-control">
+                </div>
+            
+                <!-- SUBMIT BUTTON -->
+                <button class="btn btn-dark pink-btn mt-3">Edit</button>
+            </form>
+        </div>
+    </div>
+</div>

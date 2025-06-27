@@ -1,0 +1,120 @@
+<!-- THIS IS CUSTOM NAVBAR WHICH IS CONNECTED TO BOILERPLATE AND EACH PAGE -->
+
+<nav class="navbar navbar-expand-lg bg-body-light border-bottom sticky-top">
+    <div class="container-fluid">
+        <div class="brand-and-searchbar">
+            <a class="navbar-brand" href="/listings">
+                <span><i class="fa-regular fa-compass logo-icon"></i></span>
+                <span class="airbnb-logo">AtithiStay</span>
+            </a>
+            <div class="search-bar">
+                <form class="search-form" action="/listings/filter/searchListingName" method="GET">
+                    <input class="search-input" type="search" placeholder="Search Your Favourite Place" aria-label="Search" name="searchListingName">
+                    <button class="search-btn pink-btn" type="submit">
+                        <i class="fa-solid fa-magnifying-glass"></i>
+                    </button>
+                </form>
+            </div>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNavAltMarkup">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+        </div>
+
+        <div class="collapse navbar-collapse bg-body-light" id="navbarNavAltMarkup" style="background-color: white;">
+            <div class="navbar-nav ms-auto">
+                <a class="nav-link" href="/listings/new">Host your home</a>
+                <div class="language-translate language-filter">
+                    <button type="button" class="btn toogleLangPopup" onclick="toggleLangPopup()">
+                        <i class="fa-solid fa-globe"></i>
+                    </button>
+                </div>
+                <div class="message-popup lang-popup" id="lang-popup">
+                    <div class="close-popup-btn">
+                        <button class="btn" onclick="closeLangPopup()">
+                            <i class="fa-solid fa-xmark"></i>
+                        </button>
+                        <div class="popup-header">
+                            <h6>Languages</h6>
+                        </div>
+                    </div>
+                    <div class="body-popup">
+                        <div class="language-options">
+                            <div class="sugg-lang">
+                                <h4>Suggested languages</h4>
+                                <div id="sugg-option-container" class="notranslate"></div>
+                            </div>
+                            <div class="choose-lang mt-4">
+                                <h4>Choose a language</h4>
+                                <div id="options-container" class="notranslate"></div>
+                            </div>
+                        </div>
+                        <div id="google_element"></div>
+                    </div>
+                </div>
+                <% if(!currUser) { %>
+                    <a class="nav-link" href="/signup"><b>Sign up</b></a>
+                    <a class="nav-link" href="/login"><b>Log in</b></a>
+                <% } %>
+                <% if(currUser) { %>
+                    <a class="nav-link" href="/profile/<%= currUser.id %>"><b>Profile</b></a>
+                    <a class="nav-link" href="/logout"><b>Log out</b></a>
+                <% } %>
+            </div>
+        </div>
+    </div>
+</nav> 
+
+<div class="footbar">
+    <div class="footbar-items">
+        <a class="nav-link" href="/listings">
+            <i class="fa-solid fa-compass"></i>
+            <b>Home</b>
+        </a>
+    </div>
+    <div class="footbar-items">
+        <a class="nav-link" href="/listings/new">
+            <i class="fa-solid fa-house"></i>
+            <b>Host your home</b>
+        </a>
+    </div>    
+    <% if(!currUser) { %>
+        <div class="footbar-items">
+            <a class="nav-link" href="/signup">
+                <i class="fa-solid fa-user-plus"></i>
+                <b>Sign up</b>
+            </a>
+        </div>
+        <div class="footbar-items">
+            <a class="nav-link" href="/login">
+                <i class="fa-solid fa-right-to-bracket"></i>
+                <b>Log in</b>
+            </a>
+        </div>
+    <% } %>
+    <% if(currUser) { %>
+        <div class="footbar-items">
+            <a class="nav-link" href="/profile/<%= currUser.id %>">
+                <i class="fa-solid fa-user"></i>
+                <b>Profile</b>
+            </a>
+        </div>
+        <div class="footbar-items">
+            <a class="nav-link" href="/logout">
+                <i class="fa-solid fa-right-from-bracket"></i>
+                <b>Log out</b>
+            </a>
+        </div>
+    <% } %>
+</div>
+
+
+<script type="text/javascript">
+    function loadGoogleTranslate() {
+        new google.translate.TranslateElement(
+            {pageLanguage: 'en'},
+            "google_element"
+        );
+    }
+</script>
+
+<script type="text/javascript" src="https://translate.google.com/translate_a/element.js?cb=loadGoogleTranslate"></script>

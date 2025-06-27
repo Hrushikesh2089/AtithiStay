@@ -1,0 +1,29 @@
+<!-- MAPTILER MAP -->
+<div class="col-6 offset-sm-0 offset-md-1 offset-lg-2 map-and-loction-btns">
+    <h4><b>Where you'll be</b></h4>
+    <div class="mb-3" id="map"></div>
+    <div class="location-btns mt-3 mb-3">
+
+        <!-- LOCATE TO USERS LOCATION -->
+        <div class="locateMeButton">
+            <button id="locateMeButton" class="btn btn-outline-dark mb-1">Locate to your location</button>
+            <p>Currently you are at <br><b id="locationText"></b></p>
+        </div>
+
+        <!-- LOCATE TO LISTING LOCATION -->
+        <div class="locateListingButton">
+            <button id="locateListingButton" class="btn btn-outline-dark mb-1">Locate to listing location</button>
+            <p>Your destination is at <br><b><%= listing.address%></b></p>
+        </div>
+
+        <!-- DISTANCE TO TRAVEL -->
+        <div class="distanceButton">
+            <button id="distanceButton" class="btn btn-outline-dark mb-1">Distance to be traveled</button>
+            <p>Approx straight distance <br><b id="distanceText"></b></p>
+        </div>
+
+    </div>
+    <div class="location-btns-handaling-text offset-4">
+        <p>"To calculate distance, first locate to your location and then you will get approx distance to be traveled".</p>
+    </div>
+</div>

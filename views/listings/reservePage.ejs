@@ -1,0 +1,236 @@
+<% layout("/layouts/boilerplate.ejs") %>
+<%- include("../includes/flash.ejs") %>
+
+<div class="container">
+
+    <div class="reservePage m-lg-5 m-md-5 m-sm-0 mb-0 col-lg-11 col-md-11 col-sm-12">
+        
+        
+        <form action="/listings/reserve/<%= listing._id %>/<%= currUser._id %>" method="POST" enctype="multipart/form-data">
+            
+            <h3 class="col-lg-11 col-md-11 col-sm-12 offset-lg-1 offset-md-0 offset-sm-0">Confirm and pay</h3>
+            
+            <div class="tripAndPaymentDetails mt-4">
+                <div class="tripDetails col-lg-5 col-md-12 col-sm-12 offset-lg-1 offset-md-0 offset-sm-0">
+                    <div class="yourTripDateAndGuests mb-4">
+                        <h5 class="mb-4 mt-4">Your Trip</h5>
+                        <div class="yourTrip">
+                            <div class="yourTripDetails mb-3">
+                                <h6>
+                                    <span>Dates</span>
+                                    <a href="/listings/<%= listing._id %>" class="listing-link"><u>Edit</u></a>
+                                </h6>
+                                <p><%= new Date(checkInDate).toLocaleDateString('en-GB', { day: 'numeric', month: 'long' }); %> - <%= new Date(checkOutDate).toLocaleDateString('en-GB', { day: 'numeric', month: 'long' }); %></p>
+                                <input type="hidden" name="checkInDate" value=<%= checkInDate %> required>
+                                <input type="hidden" name="checkOutDate" value=<%= checkOutDate %> required>
+                            </div>
+                            <div class="yourTripDetails">
+                                <h6>
+                                    <span>Guests</span>
+                                    <a href="/listings/<%= listing._id %>" class="listing-link"><u>Edit</u></a>
+                                </h6>
+                                <p><%= (parseInt(adults) + parseInt(childrens)) %> guest</p>
+                                <input type="hidden" id="adults" name="adults" value=<%= adults %> oninput="updateGuestCount()" required>
+                                <input type="hidden"  id="children" name="childrens" value=<%= childrens %> oninput="updateGuestCount()">
+                            </div>
+                        </div>
+                    </div>
+                    <hr>
+                    <div class="paymentMode col-12">
+                        <h5 class="mb-4 mt-4">
+                            <span>Pay with</span>
+                            <img src="https://a0.muscache.com/airbnb/static/packages/assets/frontend/legacy-shared/svgs/payments/logo_upi.1762e17397c0d6e85fb10050020d93f4.svg" alt="upi">
+                        </h5>
+                        <!-- FIXED DROPDOWN BUTTON -->
+                        <div class="dropdown mb-3 col-12">
+                            <button class="btn border-dark rounded dropdown-toggle col-12" type="button" id="dropdownMenuButton"
+                                data-bs-toggle="dropdown" aria-expanded="false">
+                                <div class="upiDropdownSelect">
+                                    <img src="https://a0.muscache.com/airbnb/static/packages/assets/frontend/legacy-shared/svgs/payments/logo_upi.1762e17397c0d6e85fb10050020d93f4.svg" alt="upi">
+                                    <span>UPI</span>
+                                </div>
+                            </button>
+                            <ul class="dropdown-menu col-12" aria-labelledby="dropdownMenuButton">
+                                <li class="dropdown-item">
+                                    <img src="https://a0.muscache.com/airbnb/static/packages/assets/frontend/legacy-shared/svgs/payments/logo_upi.1762e17397c0d6e85fb10050020d93f4.svg" alt="upi">
+                                    <span>UPI</span>
+                                </li>
+                            </ul>
+                        </div>
+                        <!-- FIXED RADIO -->
+                        <div class="form-check">
+                            <input class="form-check-input" type="radio" name="flexRadioDefault" id="flexRadioDefault2" checked>
+                            <label class="form-check-label" for="flexRadioDefault2">
+                                Pay using UPI QR code
+                            </label>
+                        </div>
+                    </div> 
+
+                    <!-- PAYMENT QR -->
+                    <div class="paymentQR mt-4 mb-4">
+                        <div class="payment-qr col-12">
+                            <canvas id="qr-code"></canvas>
+                            <div class="upiApps">
+                                <p>
+                                    <span>Generate and scan QR code with any UPI app to proceed with payment of</span>
+                                    <span class="finalAmountForUPIPayament">&#8377;<%= final_Payment_Amount %></span>
+                                </p>
+                                <div class="upiAppsLogo">
+                                    <img src="https://res.cloudinary.com/dgis4em6o/image/upload/v1750621716/google-pay-logo-19558_klf00l.svg" alt="gpay">
+                                    <img src="https://res.cloudinary.com/dgis4em6o/image/upload/v1750621716/amazon-pay-logo-19613_xkw8iy.svg" alt="amazon_pay" style="background-color: black">
+                                    <img src="https://res.cloudinary.com/dgis4em6o/image/upload/v1750621716/phonepe_tsjkul.svg" alt="phone_pay">
+                                    <img src="https://res.cloudinary.com/dgis4em6o/image/upload/v1750621716/bhim_lfbvvn.svg" alt="bhim">
+                                </div>
+                            </div>
+                        </div>
+                        <div class="generateQR col-12">
+                            <button onclick="generateQR()" class="generateQR-btn reserve-btn" type="button">Generate QR</button>
+                            <div class="countdownAndExpiredMsg">
+                                <p id="countdown"></p>
+                                <p id="expired-msg">QR Code is expired, generate new.</p>
+                            </div>
+                        </div>
+                    </div>
+                    <hr>
+
+                    <!-- UPLOAD PAYMENT SCREENSHOT -->
+                    <div class="uploadPaymentScreenshot mt-4 mb-3">
+                        <h5>Upload payment Screenshot</h5>
+                        <div class="form-group">
+                            <lable for="paymentScreenshot" class="form-label">To check payment confirmation, please upload screenshot with all payment details</lable>
+                            <input name="paymentScreenshot" type="file" class="form-control" required>
+                            <div class="invalid-feedback">Please upload valid screenshot of payment</div>
+                        </div>
+                    </div>
+                    <div class="reserve">
+                        <button class="reserve-btn" type="submit">Reserve</button>
+                    </div>
+                </div>
+        
+                <div class="paymentDetails col-lg-5 col-md-12 col-sm-12 offset-lg-1 offset-md-0 offset-sm-0 sticky-top">
+                    <div class="yourTripListing mb-4">
+                        <img src="<%= listing.image[0].url %>" alt="listing_img">
+                        <div class="tripListingName">
+                            <h6><%= listing.title %></h6>
+                            <p>Entire home</p>
+                            <p>Hosted by <%= listing.owner.username %></p>
+                            <p><i class="fa-solid fa-star"></i>&nbsp;<%= average %>&nbsp;&nbsp;(<%= listing.reviews.length %>&nbsp;reviews)</p>
+                        </div>
+                    </div>
+                    <hr>
+
+                    <!-- PAYMENT BREAKDOWN -->
+                    <div class="paymentBreakdown">
+                        <div class="pricing pay-price">
+                            <div class="price-comp">
+                                <span>&#8377;<%= listing.price.toLocaleString("en-IN") %></span>
+                                <span>&#215;</span>
+                                <span><span id="total-nights"><%= total_Nights %></span> night</span>
+                                <input type="hidden" name="total_Nights" id="totalNights" value=<%= total_Nights %> >
+                            </div>
+                            <div class="price-to-pay">
+                                <span>&#8377;<%= listing.price*total_Nights %></span>
+                            </div>
+                        </div>
+                        <div class="pricing service-fee">
+                            <span>Service fees &nbsp;&nbsp;(10%)</span>
+                            <span>&#8377;<%= final_Service_Fee %></span>
+                            <input type="hidden" name="final_Service_Fee" id="finalServiceFee" value=<%=final_Service_Fee %> > 
+                        </div>
+                        <div class="pricing gst">
+                            <span>GST &nbsp;&nbsp;(18%)</span>
+                            <span>&#8377;<%= final_Gst_Amount %></span>
+                            <input type="hidden" name="final_Gst_Amount" id="finalGstAmount" value=<%=final_Gst_Amount %> >
+                        </div>
+                        <hr>
+                        <div class="pricing total-final-amount">
+                            <span>Total with taxes</span>
+                            <span>&#8377;<%= final_Payment_Amount %></span>
+                            <input type="hidden" name="final_Payment_Amount" id="finalPaymentAmount" value=<%= final_Payment_Amount %> >
+                        </div>
+                    </div>
+                </div>
+            </div>
+    
+        </form>
+    
+    </div>
+</div>
+
+<!-- QR CODE SCRIPT -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/qrious/4.0.2/qrious.min.js"></script>
+
+<!-- QR CODE GERERATEING SCRIPT -->
+<script>
+    let qr, timer, countdownInterval;
+
+    function setBlurredExpiredQR() {
+        const canvas = document.getElementById("qr-code");
+        qr.set({
+            value: "Expired QR Code",
+            size: 130
+        });
+        canvas.classList.add("blur");
+        document.getElementById("expired-msg").style.display = "block";
+        document.getElementById("countdown").textContent = "";
+    }
+
+    window.onload = function () {
+        qr = new QRious({
+            element: document.getElementById("qr-code"),
+            value: "",
+            size: 130
+        });
+        setBlurredExpiredQR(); // show blurred expired QR on page load
+    };
+
+    function generateQR() {
+        clearTimeout(timer);
+        clearInterval(countdownInterval);
+
+        document.getElementById("expired-msg").style.display = "none";
+        document.getElementById("countdown").textContent = "";
+        document.getElementById("qr-code").classList.remove("blur");
+
+        const upiID = "<%= listing.ownerUPIID %>";
+        const name = "<%= listing.ownerBusinessName %>";
+        const amount = "<%= final_Payment_Amount %>";
+
+        if (!amount || amount <= 0) {
+            alert("Please enter a valid amount.");
+            return;
+        }
+
+        const upiLink = `upi://pay?pa=${upiID}&pn=${name}&am=${amount}&cu=INR`;
+
+        qr.set({
+            value: upiLink
+        });
+
+        // Start 5 minute timer (300 seconds)
+        const expiryTime = Date.now() + 5 * 60 * 1000; // 5 minutes from now
+
+        countdownInterval = setInterval(() => {
+            const timeLeftMs = expiryTime - Date.now();
+
+            if (timeLeftMs <= 0) {
+                clearInterval(countdownInterval);
+                document.getElementById("countdown").textContent = "";
+                setBlurredExpiredQR();
+                return;
+            }
+
+            const totalSeconds = Math.floor(timeLeftMs / 1000);
+            const minutes = String(Math.floor(totalSeconds / 60)).padStart(2, '0');
+            const seconds = String(totalSeconds % 60).padStart(2, '0');
+
+            document.getElementById("countdown").textContent = `QR Code Expires in: ${minutes}:${seconds}`;
+        }, 1000);
+
+
+        // Clear QR code after 5 minutes
+        timer = setTimeout(() => {
+            setBlurredExpiredQR();
+        }, 5 * 60 * 1000);
+    }
+</script>

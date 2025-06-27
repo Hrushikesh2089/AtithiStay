@@ -1,0 +1,165 @@
+<!-- FILTER BAR -->
+<div class="filters sticky-top ">
+
+    <!-- FILTER CATEGORY OPTIONS -->
+    <div class="filter-options">
+        <button class="move-filter btn filter-btn" id="scroll-left">
+            <i class="fa-solid fa-chevron-left"></i>
+        </button>
+        <div class="scroll-filters">
+            <div class="filter all-filter">
+                <a href="/listings">
+                    <i class="fa-solid fa-compass"></i>
+                    <p>All</p>
+                </a>
+            </div>
+            <div class="filter">
+                <a href="/listings/Trending">
+                    <i class="fa-solid fa-fire"></i>
+                    <p>Trending</p>
+                </a>
+            </div>
+            <div class="filter">
+                <a href="/listings/filter/Rooms">
+                    <i class="fa-solid fa-bed"></i>
+                    <p>Rooms</p>
+                </a>
+            </div>
+            <div class="filter">
+                <a href="/listings/filter/Iconic_cities">
+                    <i class="fa-solid fa-mountain-city"></i>
+                    <p>Iconic Cities</p>
+                </a>
+            </div>
+            <div class="filter">
+                <a href="/listings/filter/Mountains">
+                    <i class="fa-solid fa-mountain"></i>
+                    <p>Mountains</p>
+                </a>
+            </div>
+            <div class="filter">
+                <a href="/listings/filter/Amazing_pools">
+                    <i class="fa-solid fa-person-swimming"></i>
+                    <p>Amazing Pools</p>
+                </a>
+            </div>
+            <div class="filter">
+                <a href="/listings/filter/Castels">
+                    <i class="fa-brands fa-fort-awesome"></i>
+                    <p>Castels</p>
+                </a>
+            </div>
+            <div class="filter">
+                <a href="/listings/filter/Camping">
+                    <i class="fa-solid fa-campground"></i>
+                    <p>Camping</p>
+                </a>
+            </div>
+            <div class="filter">
+                <a href="/listings/filter/Farms">
+                    <i class="fa-solid fa-tractor"></i>
+                    <p>Farms</p>
+                </a>
+            </div>
+            <div class="filter">
+                <a href="/listings/filter/Arctic">
+                    <i class="fa-solid fa-snowflake"></i>
+                    <p>Arctic</p>
+                </a>
+            </div>
+            <div class="filter">
+                <a href="/listings/filter/Amazing_views">
+                    <i class="fa-solid fa-mountain-sun"></i>
+                    <p>Amazing views</p>
+                </a>
+            </div>
+            <div class="filter">
+                <a href="/listings/filter/Treehouse">
+                    <i class="fa-solid fa-tree-city"></i>
+                    <p>Treehouse</p>
+                </a>
+            </div>
+            <div class="filter">
+                <a href="/listings/filter/Cabins">
+                    <i class="fa-solid fa-house-chimney"></i>
+                    <p>Cabins</p>
+                </a>
+            </div>
+            <div class="filter">
+                <a href="/listings/filter/Mansions">
+                    <i class="fa-solid fa-chess-rook"></i>
+                    <p>Mansions</p>
+                </a>
+            </div>
+        </div>
+        <button class="move-filter btn filter-btn" id="scroll-right">
+            <i class="fa-solid fa-chevron-right"></i>
+        </button>
+    </div>
+
+    <!-- PRICE FILTER BUTTION -->
+    <div class="filter price-filter">
+        <button type="button" class="btn filter-btn" onclick="toggleFilterPopup()">
+            <div class="price-filter-content">
+                <i class="fa-solid fa-arrow-up-wide-short filter-ico"></i>
+                <span>Filters</span>
+            </div>
+        </button>
+    </div>
+
+    <!-- PRICE FILTER MESSAGE POPUP -->
+    <div class="message-popup filter-popup" id="filter-popup">
+        <div class="close-popup-btn">
+            <button class="btn" onclick="closeFilterPopup()">
+                <i class="fa-solid fa-xmark"></i>
+            </button>
+            <div class="popup-header">
+                <h6>Filters</h6>
+            </div>
+        </div>
+        <div class="popup-price-range">
+            <h4>Price range</h4>
+            <p>Nightly price before fees and taxes</p>
+            <form action="/listings/filter/price" method="GET">
+                <div class="min-max-range row mt-4">
+                    <div class="col-6">
+                        <label for="min-range" class="form-label">Minimum Price</label>
+                        <input type="range" id="min-range" min="800" max="12000" class="form-range" name="min-price" value="800" step="100">
+                        <input type="number" id="min-number" class="form-control mt-3" placeholder="Minimum" value="800">
+                    </div>
+                    <div class="col-6 mb-4">
+                        <label for="max-range" class="form-label">Maximum Price</label>
+                        <input type="range" id="max-range" min="800" max="12000" class="form-range" name="max-price" value="12000" step="100">
+                        <input type="number" id="max-number" class="form-control mt-3" placeholder="Maximum" value="12000">
+                    </div> 
+                    <div class="filter tax-filter2">
+                    <hr>
+                        <button type="button" class="btn filter-btn">
+                            <div class="tax-btn">
+                                <label for="flexSwitchCheckDefault2" class="switch-tax-btn">Display total after taxes &nbsp;&nbsp;&nbsp;</label>
+                                <div class="form-check form-switch">
+                                    <input class="form-check-input" type="checkbox" role="switch" id="flexSwitchCheckDefault2">
+                                </div>
+                            </div>
+                        </button>
+                    </div>
+
+                </div>
+                <button class="btn btn-dark popup-show-btn">Show Places</button>
+            </form>
+        </div>
+    </div>
+
+    <!-- TAX FILTER BUTTON -->
+    <div class="filter tax-filter">
+        <button type="button" class="btn filter-btn filter-tax-btn">
+            <div class="tax-btn">
+                <label for="flexSwitchCheckDefault" class="switch-tax-btn">Display total after taxes &nbsp;&nbsp;&nbsp;</label>
+                <div class="form-check form-switch">
+                    <input class="form-check-input" type="checkbox" role="switch" id="flexSwitchCheckDefault">
+                </div>
+            </div>
+        </button>
+    </div>
+    
+</div>

@@ -1,0 +1,134 @@
+<!-- THIS IS NEW ROUTE IN WHICH WE CAN CREATE NEW LISTINGS -->
+
+<!-- BOILERPLATE FOR NAVBAR, BODY AND FOOTER -->
+<% layout("/layouts/boilerplate") %>
+<%- include("../includes/flash.ejs") %>
+
+<div class="container">
+
+    <div class="row mt-3">
+        <div class="col-lg-8 col-md-10 col-sm 12 offset-lg-2 offset-md-1 offset-sm-20">
+            <h3>Create a New Listing</h3>
+    
+            <!-- FORM FOR NEW LISTINGS -->
+            <form method="POST" action="/listings" novalidate class="needs-validation" enctype="multipart/form-data">
+    
+                <!-- TITLE -->
+                <div class="mb-3">
+                    <lable for="title" class="form-label">Title</lable>
+                    <input name="listing[title]" placeholder="Add a cachy title" type="text" class="form-control" required>
+                    <div class="valid-feedback">Title looks good!</div>
+                </div>
+    
+                <!-- DESCRIPTION -->
+                <div class="mb-3">
+                    <lable for="description" class="form-label">Description</lable>
+                    <div class="invalid-feedback"></div>
+                    <textarea name="listing[description]" class="form-control" required></textarea>
+                    <div class="invalid-feedback">Please enter short Description</div>
+                </div>
+    
+                <!-- IMAGES UPLOAD -->
+                <div class="mb-3">
+                    <lable for="image" class="form-label">Upload maximum 3 Lisiting Images</lable>
+                    <input name="listing[image]" type="file" class="form-control" required multiple>
+                    <div class="invalid-feedback">Please upload valid images of listing</div>
+                </div>
+    
+                <div class="row">
+    
+                    <!-- Maximum guests allowed -->
+                    <div class="mb-3 col-md-6">
+                        <lable for="maxguests" class="form-label">Maximum guests allowed</lable>
+                        <input name="listing[maxguests]" placeholder="10" type="number" min="1" max="15" class="form-control" id="maxguests" required>
+                        <div class="invalid-feedback">Guest count should be between 1 to 15</div>
+                    </div>
+    
+                    <!-- Category -->
+                    <div class="mb-3 col-md-6">
+                        <label for="category" class="form-label">Category</label>
+                        <select name="listing[category]" id="category" class="form-select" required>
+                            <option disabled selected value="">Add your listing Category</option>
+                            <option value="Rooms">Rooms</option>
+                            <option value="Iconic_cities">Iconic Cities</option>
+                            <option value="Mountains">Mountains</option>
+                            <option value="Amazing_pools">Amazing Pools</option>
+                            <option value="Castels">Castels</option>
+                            <option value="Camping">Camping</option>
+                            <option value="Farms">Farms</option>
+                            <option value="Arctic">Arctic</option>
+                            <option value="Amazing_views">Amazing Views</option>
+                            <option value="Treehouse">Treehouse</option>
+                            <option value="Cabins">Cabins</option>
+                            <option value="Mansions">Mansions</option>
+                        </select>
+                    </div>
+    
+                </div>
+    
+                <!-- Amenities -->
+                <div class="mb-3">
+                    <lable for="amenities" class="form-label">Amenities</lable>
+                    <div class="invalid-feedback"></div>
+                    <textarea name="listing[amenities]" placeholder="For example: Wifi, Hot water, Swiming pool, Garden view, Cleaning products, Shower, Pillows and blankets, HD-TV, AC, Fire extinguisher, Fridge, Dishes and cutlery, Cooking basics, Dining table, etc." class="form-control" required></textarea>
+                    <div class="invalid-feedback">Please enter all Amenities properly</div>
+                </div>
+    
+                <!-- DESTINATION -->
+                <div class="mb-3">
+                    <lable for="destination" class="form-label">Destination</lable>
+                    <input name="listing[destination]" placeholder="Plot no., Building no., Bunglow name, Street etc." type="text" class="form-control" required>
+                    <div class="invalid-feedback">Destination should be valid</div>
+                </div>
+    
+                <!-- Address -->
+                <div class="mb-3">
+                    <lable for="address" class="form-label">Vilage, City and State</lable>
+                    <input name="listing[address]" placeholder="Pimpri-Chinchwad, Pune, Maharashtra" type="text" class="form-control" required>
+                    <div class="invalid-feedback">Vilage, City and State should be valid</div>
+                </div>
+    
+                <div class="row">
+    
+                    <!-- COUNTRY -->
+                    <div class="mb-3 col-md-6">
+                        <lable for="country" class="form-label">Country</lable>
+                        <input name="listing[country]" placeholder="India" type="text" class="form-control" required>
+                        <div class="invalid-feedback">Country name should be valid</div>
+                    </div>
+    
+                    <!-- PRICE -->
+                    <div class="mb-3 col-md-6">
+                        <lable for="price" class="form-label">Price per night for complete listing</lable>
+                        <input name="listing[price]" placeholder="1200" min="1000" max="10000" type="number" class="form-control" required>
+                        <div class="invalid-feedback">Price should be between 1,000 to 10,000</div>
+                    </div>
+    
+                </div>
+                
+    
+                <div class="row">
+    
+                    <!-- PRICE -->
+                    <div class="mb-3 col-md-6">
+                        <lable for="ownerUPIID" class="form-label">Enter UPI ID to Recive Payment</lable>
+                        <input name="listing[ownerUPIID]" placeholder="ex. john@ybl" type="text" class="form-control" required>
+                        <div class="invalid-feedback">Please enter valid UPI ID</div>
+                    </div>
+    
+                    <!-- PRICE -->
+                    <div class="mb-3 col-md-6">
+                        <lable for="ownerBusinessName" class="form-label">Enter business name to recive payment</lable>
+                        <input name="listing[ownerBusinessName]" placeholder="ex. Cozy Homes" type="text" class="form-control" required>
+                        <div class="invalid-feedback">Please enter valid business name</div>
+                    </div>
+    
+                </div>
+    
+                <!-- SUBMIT BUTTON -->
+                <button class="btn btn-dark pink-btn mt-3">Add</button>
+                <br><br>
+            </form>
+        </div>
+    </div>
+</div>

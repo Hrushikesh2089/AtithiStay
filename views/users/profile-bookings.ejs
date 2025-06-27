@@ -1,0 +1,172 @@
+<!-- BOOKINGS DONE BY PROFILE -->
+<div class="my-bookings-for-other-listings" id="my-bookings-for-other-listings">
+    <!-- NO-BOOKINGS DONE -->
+    <% if(myBookings == 0) { %> 
+        <div class="noListing-at-center">
+            <div class="noListing">
+                <h3>No Bookings Done Yet!</h3>
+                <a class="btn pink-btn" href="/listings">Book Entire home</a>
+            </div>
+        </div>
+    <% } else { %>
+        <div class="card-body">
+            <div id="myBookingCarousel" class="carousel slide" data-bs-ride="carousel">
+
+                <!-- MY BOOKING HEADER -->
+                <div class="my-booking-header">
+                    <h6>My Bookings</h6>
+                    <!-- Carousel controls -->
+                     <% if(activeBookings.length > 1) { %> 
+                        <button class="carousel-control-prev carousel-control-prev2" type="button" data-bs-target="#myBookingCarousel" data-bs-slide="prev">
+                            <span class="carousel-control-prev-icon carousel-control-prev-icon2" aria-hidden="true"></span>
+                            <span class="visually-hidden">Previous</span>
+                        </button>
+                        <button class="carousel-control-next carousel-control-next2" type="button" data-bs-target="#myBookingCarousel" data-bs-slide="next">
+                            <span class="carousel-control-next-icon carousel-control-next-icon2" aria-hidden="true"></span>
+                            <span class="visually-hidden">Next</span>
+                        </button>
+                    <% } %>
+                </div>
+
+                <!-- MY ALL BOOKINGS -->
+                <div class="my-all-bookings">
+                    <div class="carousel-inner">
+                        <% let activeSet = false; %>
+                        <% for(let mybooking of activeBookings) { %>
+                            <% if(mybooking.user._id.toString() === profile._id.toString() && mybooking.listing) { %> 
+                                <div class="carousel-item <%= !activeSet ? 'active' : '' %>">
+                                    <% activeSet = true; %>
+                                    <div class="my-booking-details">
+                                        <div class="booked-listing-title-img-address-owner">
+
+                                            <!-- MY BOOKING LISTING HEADER -->
+                                            <div class="my-booking-header-img">
+                                                <p class="mb-2"><b><%= mybooking.listing.title %></b></p>
+                                                <div class="my-booking-img">
+                                                    <a href="/listings/<%= mybooking.listing._id %>" class="listing-link">
+                                                        <div class="card listing-card-additional">
+                                                            <div class="card-img-top">
+                                                                <img src="<%= mybooking.listing.image[0].url %>" class="col-12" alt="my-booking-img">
+                                                            </div>
+                                                            <div class="card-img-overlay"></div>                                        
+                                                        </div>
+                                                    </a>
+                                                </div>
+                                            </div>
+
+                                            <!-- MY BOOKING LISTING ADDRESS AND OWNER DETAILS -->
+                                            <div class="my-booking-address-owner">
+                                                <p><%= mybooking.listing.destination %></p>
+                                                <p><%= mybooking.listing.address %>,&nbsp;<%= mybooking.listing.country %></p> 
+                                                <hr>                                                    
+                                                <div class="host-name-image">
+                                                    <img alt="host_image"
+                                                    <% if(mybooking.listing.owner.image.url) { %>
+                                                        src=<%= mybooking.listing.owner.image.url %>
+                                                    <% } else { %>
+                                                            src="https://res.cloudinary.com/dgis4em6o/image/upload/v1731858468/wanderlust_DEV/gywagxuz6aveyiohjbfq.png"
+                                                    <% } %>
+                                                    >
+                                                    <div class="host-name-and-listings-owned">
+                                                        <p>Contact <i><%= mybooking.listing.owner.username %> for further details</i></p>
+                                                        <p class="listings-hosted-by-host">Email: <%= mybooking.listing.owner.email %></p>
+                                                        <p class="listings-hosted-by-host">Phone number: <%= mybooking.listing.owner.ownerContact %></p>
+                                                    </div>
+                                                </div>  
+                                            </div> 
+
+                                        </div>
+
+                                        <div class="my-booking-info-card my-booking-info">  
+                                            <div class="all-data-of-booking-recived">
+
+                                                <!-- BILL PDF DOWNLOAD -->
+                                                <form action="/profile/download_bill/<%= currUser.id %>/<%= mybooking._id %>" method="GET">
+                                                    <button class="download-bill-btn">
+                                                        <b>Click to download bill pdf&nbsp;&nbsp;&nbsp;</b>
+                                                        <i class="fa-solid fa-download"></i>
+                                                    </button>
+                                                </form>
+
+                                                <div class="check-in-out-section-additional check-in-out-section">
+
+                                                    <!-- DATES -->
+                                                    <div class="dates">
+                                                        <div class="check-in-date">
+                                                            <span>CHECK-IN</span>
+                                                            <p><%= new Date(mybooking.checkInDate).toLocaleDateString('en-GB') %></p>
+                                                        </div>
+                                                        <div class="check-out-date">
+                                                            <span>CHECK-OUT</span>
+                                                            <p><%= new Date(mybooking.checkOutDate).toLocaleDateString('en-GB') %></p>
+                                                        </div>
+                                                    </div>
+                                                    
+                                                    <div class="guests-additional guests">
+
+                                                        <!-- GUESTS -->
+                                                        <div class="guest-title-additional guest-title">
+                                                            <span>GUESTS&nbsp;&nbsp;(<%= mybooking.guests.adults+mybooking.guests.childrens %>)</span>
+                                                            <p><%= mybooking.guests.adults %>&nbsp;adults&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<%= mybooking.guests.childrens %>&nbsp;childrens</p>
+                                                        </div>  
+
+                                                        <!-- PAYMENT -->
+                                                        <div class="payment-screenshot">
+                                                            <span>PAYMENT</span>
+                                                            <div class="screenshot-links">
+                                                                <a href="<%= mybooking.paymentScreenshot[0].url %>" target="_blank" rel="noopener noreferrer">
+                                                                    <p>View&nbsp;&nbsp;&nbsp;</p>
+                                                                    <i class="fa-solid fa-eye"></i>
+                                                                </a>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+
+                                                <!-- PRICE DETAILS -->
+                                                <div class="price-section2">
+                                                    <div class="pricing pay-price">
+                                                        <div class="price-comp">
+                                                            <span>&#8377;<%= mybooking.listing.price.toLocaleString("en-IN") %></span>                                                                        
+                                                            <span>&#215;</span>
+                                                            <span><span id="total-nights"><%= mybooking.totalNights %></span> night</span>
+                                                        </div>
+                                                        <div class="price-to-pay">
+                                                            <span>&#8377;<span id="total-price"><%= (mybooking.listing.price*mybooking.totalNights).toLocaleString("en-IN") %></span></span>
+                                                        </div>
+                                                    </div>                                                                
+                                                    <div class="pricing service-fee">
+                                                        <span>Service fees &nbsp;&nbsp;(10%)</span>
+                                                        <span>&#8377;<span id="service-fee"><%= mybooking.paymentAmount.finalServiceFee.toLocaleString("en-IN") %></span></span>
+                                                    </div>
+                                                    <div class="pricing gst">
+                                                        <span>GST &nbsp;&nbsp;(18%)</span>
+                                                        <span>&#8377;<span id="gst-amount"><%= mybooking.paymentAmount.finalGstAmount.toLocaleString("en-IN") %></span></span>
+                                                    </div>
+                                                    <hr>
+                                                    <div class="pricing total-final-amount">
+                                                        <span>Total amount paid with taxes</span>
+                                                        <span>&#8377;<span id="final-total"><%= mybooking.paymentAmount.finalPaymentAmount.toLocaleString("en-IN") %></span></span>
+                                                    </div>
+                                                </div>   
+
+                                                <!-- BOOKING ACCEPT OR DECLINE -->
+                                                <div class="status-of-mybooking mt-3">
+                                                    <% if (mybooking.status === 0) { %> 
+                                                        <p class="p-2 bg-success text-white">Congratulations! Your booking is Accepted.</p> 
+                                                    <% } else if (mybooking.status === 1) { %> <p class=" p-2 bg-dark text-white">Regrets! Your booking is Declined.</p> 
+                                                    <% } else if (mybooking.status === 2 ) { %> <p class="p-2 pending-btn">Wait until! Your booking is Pending.</p> 
+                                                    <% } %>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            <% } %> 
+                        <% } %> 
+                    </div>
+                </div>
+            </div>
+        </div>
+    <% } %>
+</div>

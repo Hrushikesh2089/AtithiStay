@@ -1,0 +1,13 @@
+<!-- BOILERPLATE FOR NAVBAR AND FOOTER -->
+<% layout("/layouts/boilerplate") %>
+<%- include("../includes/flash.ejs") %>
+
+<div class="container">
+    <div class="profile row">
+        <%- include("profile-info.ejs") %>
+        <div class="profile-info col-lg-7 col-md-12 col-sm-12">
+            <%- include("profile-bookings.ejs") %>
+            <%- include("profile-listings.ejs") %>
+        </div>   
+    </div>
+</div>

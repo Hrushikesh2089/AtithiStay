@@ -1,0 +1,312 @@
+<!-- LISTINGS CREATED IN PROFILE -->
+<div class="listings-in-profile" id="my-hosted-listings">
+    <% if(userListingCount == 0) { %> 
+        <div class="noListing-at-center">
+            <div class="noListing">
+                <h3>No Listing Created Yet!</h3>
+                <a class="btn pink-btn" href="/listings/new">Host your home</a>
+            </div>
+        </div>
+    <% } else { %>
+
+        <!-- MY HOSTED LISTINGS -->
+        <div class="card-body">
+            <div id="hostedListingsCarousel" class="carousel slide" data-bs-ride="carousel">
+
+                <!-- MY HOSTED LISTING HEADER -->
+                <div class="my-booking-header">
+                    <h6>My Hosted Listings</h6>
+                    <!-- Carousel controls -->
+                    <% if(userListingCount > 1) { %>
+                        <button class="carousel-control-prev carousel-control-prev2" type="button" data-bs-target="#hostedListingsCarousel" data-bs-slide="prev">
+                            <span class="carousel-control-prev-icon carousel-control-prev-icon2" aria-hidden="true"></span>
+                            <span class="visually-hidden">Previous</span>
+                        </button>
+                        <button class="carousel-control-next carousel-control-next2" type="button" data-bs-target="#hostedListingsCarousel" data-bs-slide="next">
+                            <span class="carousel-control-next-icon carousel-control-next-icon2" aria-hidden="true"></span>
+                            <span class="visually-hidden">Next</span>
+                        </button>
+                    <% } %>
+                </div>
+
+                <!-- MY HOSTED LISTING DETAILS -->
+                <div class="my-all-bookings-additional">
+                    <% if(userListingCount != 0) { %>
+                        <div class="carousel-inner">
+                        <% let activeSet = false; %>
+                            <% for(let listing of allListings) { %>
+                                <% if (profile.username == listing.owner.username) { %>
+                                    <div class="carousel-item <%= !activeSet ? 'active' : '' %>">
+                                    <% activeSet = true; %>
+                                        <div class="my-booking-details">
+                                            <div class="booked-listing-title-img-address-owner">
+
+                                                <!-- HOSTED LISTING TITLE -->
+                                                <p class="mb-2"><b><%= listing.title %></b></p>
+
+                                                <!-- HOSTED LISTING IMAGE -->
+                                                <div class="my-booking-img">
+                                                    <a href="/listings/<%= listing._id %>" class="listing-link">
+                                                        <div class="card listing-card-additional">
+                                                            <div class="card-img-top">
+                                                                <img src="<%= listing.image[0].url %>" alt="my-booking-img">
+                                                            </div>
+                                                            <div class="card-img-overlay"></div>                                        
+                                                        </div>
+                                                    </a>
+                                                </div>
+                                                
+                                                <!-- UPCOMMING GUEST FO THIS LISTING -->
+                                                <% const guestForThisListing = upcommingGuest.find(guest => guest.listing._id.toString() === listing._id.toString()); %>
+                                                <div class="upcomming-guests-for-listing">
+                                                    <% if (guestForThisListing) { %>
+                                                        
+                                                        <!-- UPCOMMING GUEST NAME -->
+                                                        <div class="upcomming-guest-header">
+                                                            <span><b>Upcoming guest</b></span>
+                                                            <span><b>is <%= guestForThisListing.user.username %></b></span>
+                                                        </div>
+
+                                                        <!-- UPCOMMING GUEST BOOKING DETAILS -->
+                                                        <div class="upcomming-guest-details">
+                                                            <div class="upcomming-guest-profile-img-name">
+                                                                <div class="check-in-out-section-additional check-in-out-section">
+                                                                    <div class="dates">
+                                                                        <div class="check-in-date">
+                                                                            <span>CHECK-IN</span>
+                                                                            <p><%= new Date(guestForThisListing.checkInDate).toLocaleDateString('en-GB') %></p>
+                                                                        </div>
+                                                                        <div class="check-out-date">
+                                                                            <span>CHECK-OUT</span>
+                                                                            <p><%= new Date(guestForThisListing.checkOutDate).toLocaleDateString('en-GB') %></p>
+                                                                        </div>
+                                                                    </div>
+                                                                    <div class="guests-additional guests">
+                                                                        <div class="guest-title-additional guest-title">
+                                                                            <span>GUESTS (<%= guestForThisListing.guests.adults + guestForThisListing.guests.childrens %>)</span>
+                                                                            <p><%= guestForThisListing.guests.adults %> adults &nbsp;&nbsp;&nbsp;&nbsp; <%= guestForThisListing.guests.childrens %> children</p>
+                                                                        </div>
+                                                                        <div class="payment-screenshot">
+                                                                            <span>PAYMENT</span>
+                                                                            <p>&#8377;<%= guestForThisListing.paymentAmount.finalPaymentAmount.toLocaleString("en-IN") %></p>
+                                                                        </div>
+                                                                    </div>
+                                                                    <div class="payment-screenshot">
+                                                                        <img src="<%= guestForThisListing.paymentScreenshot %>" alt="">
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    <% } else { %>
+                                                        <!-- NO UPCOMMING GUEST -->
+                                                        <div class="noListing-at-center">
+                                                            <div class="noListing">
+                                                                <h6>No upcoming guests for <br>this listing!</h6>
+                                                            </div>
+                                                        </div>
+                                                    <% } %>
+                                                </div>
+                                            </div> 
+                                            
+                                            <!-- ALL BOOKINGS RECIVED FOR LISTING -->
+                                            <div class="my-booking-info"> 
+                                                <div class="new-accepted-declined-bookings sticky-top">
+                                                    <h6 onclick="bookingsView()"><span id="all-booking">All bookings</span></h6>
+                                                    <h6 onclick="bookingsView()"><span id="new-booking">New</span></h6>
+                                                    <h6 onclick="bookingsView()"><span id="accepted-booking">Accepted</span></h6>
+                                                    <h6 onclick="bookingsView()"><span id="declined-booking">Declined</span></h6>
+                                                </div>
+                                                
+                                                <div class="my-booking-info-card my-booking-info-card2">
+                                                    <% let hasBookings = false; %>
+                                                        <% for (let booking of activeBookings) { %>
+                                                            <% if (booking.listing && booking.listing._id.equals(listing._id)) { %> <!-- Match listing ID with booking -->
+                                                                <% hasBookings = true; %> 
+                                                                <div class="all-data-of-booking-recived" data-status="<%= booking.status %>">
+
+                                                                    <!-- BOOKING USER -->
+                                                                    <div class="booking-done-by-user">
+                                                                        <p><b><%= booking.user.username %></b><b><i class="fa-solid fa-phone"></i>&nbsp;&nbsp;<%= booking.user.ownerContact %></b></p>
+                                                                    </div>
+                                                                    
+                                                                    <div class="check-in-out-section-additional check-in-out-section">
+
+                                                                        <!-- DATES -->
+                                                                        <div class="dates">
+                                                                            <div class="check-in-date">
+                                                                                <span>CHECK-IN</span>
+                                                                                <p><%= new Date(booking.checkInDate).toLocaleDateString('en-GB') %></p>
+                                                                            </div>
+                                                                            <div class="check-out-date">
+                                                                                <span>CHECK-OUT</span>
+                                                                                <p><%= new Date(booking.checkOutDate).toLocaleDateString('en-GB') %></p>
+                                                                            </div>
+                                                                        </div>
+                                                                        
+                                                                        <div class="guests-additional guests">
+
+                                                                            <!-- GUESTS -->
+                                                                            <div class="guest-title-additional guest-title">
+                                                                                <span>GUESTS&nbsp;&nbsp;(<%= booking.guests.adults+booking.guests.childrens %>)</span>
+                                                                                <p><%= booking.guests.adults %>&nbsp;adults&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<%= booking.guests.childrens %>&nbsp;childrens</p>
+                                                                            </div>  
+
+                                                                            <!-- PAYMENT -->
+                                                                            <div class="payment-screenshot">
+                                                                                <span>PAYMENT</span>
+                                                                                <div class="screenshot-links">
+                                                                                    <a href="<%= booking.paymentScreenshot[0].url %>" target="_blank" rel="noopener noreferrer">
+                                                                                        <p>View&nbsp;</p>
+                                                                                        <i class="fa-solid fa-eye"></i>
+                                                                                    </a> 
+                                                                                    <a href="<%= booking.paymentScreenshot[0].url.replace('/upload/', '/upload/fl_attachment:' + booking.user.username + '_payment') %>">
+                                                                                        <p>Downlaod&nbsp;</p>
+                                                                                        <i class="fa-solid fa-download"></i>
+                                                                                    </a>                                                                                              
+                                                                                </div>
+                                                                            </div>
+                                                                        </div>
+                                                                    </div>
+
+                                                                    <!-- PRICE SECTION -->
+                                                                    <div class="price-section-2-additional price-section2">
+                                                                        <div class="pricing-additional pricing pay-price">
+                                                                            <div class="price-comp">
+                                                                                <span>&#8377;<%= booking.listing.price.toLocaleString("en-IN") %></span>                                                                                            
+                                                                                <span>&#215;</span>
+                                                                                <span><span id="total-nights"><%= booking.totalNights %></span> night</span>
+                                                                            </div>
+                                                                            <div class="pricing-additional price-to-pay">
+                                                                                <span>&#8377;<span id="total-price"><%= (booking.listing.price*booking.totalNights).toLocaleString("en-IN") %></span></span>
+                                                                            </div>
+                                                                        </div>                                                                                    
+                                                                        <div class="pricing-additional pricing service-fee">
+                                                                            <span>Service fees &nbsp;&nbsp;(10%)</span>
+                                                                            <span>&#8377;<span id="service-fee"><%= booking.paymentAmount.finalServiceFee.toLocaleString("en-IN") %></span></span>
+                                                                        </div>
+                                                                        <div class="pricing-additional pricing gst">
+                                                                            <span>GST &nbsp;&nbsp;(18%)</span>
+                                                                            <span>&#8377;<span id="gst-amount"><%= booking.paymentAmount.finalGstAmount.toLocaleString("en-IN") %></span></span>
+                                                                        </div>
+                                                                        <div class="pricing-additional pricing total-final-amount">
+                                                                            <span>Total amount paid with taxes</span>
+                                                                            <span>&#8377;<span id="final-total"><%= booking.paymentAmount.finalPaymentAmount.toLocaleString("en-IN") %></span></span>
+                                                                        </div>
+                                                                    </div>   
+                                                                    
+                                                                    <!-- ACCEPT OR DECLINE BOOKING -->
+                                                                    <div class="accept-decline">
+                                                                        <% if(booking.status != 0 && booking.status != 1) { %>
+                                                                            <form action="/profile/accept/<%= booking.user._id %>/<%= booking.listing._id %>/<%= listing.owner._id %>/<%= booking._id %>" method="POST">
+                                                                                <button class="btn btn-success mt-2 mb-2">Accept</button>
+                                                                            </form>
+                                                                            <form action="/profile/decline/<%= booking.user._id %>/<%= booking.listing._id %>/<%= listing.owner._id %>/<%= booking._id %>" method="POST">
+                                                                                <button class="btn btn-dark mt-2 mb-2">Decline</button>
+                                                                            </form>
+                                                                        <% } else if(booking.status == 0) { %>
+                                                                            <p class="btn btn-success accepted-declined-status mt-2">Accepted</p>
+                                                                        <% } else if(booking.status == 1) { %>
+                                                                            <p class="btn btn-dark accepted-declined-status mt-2">Declined</p>
+                                                                        <% } %>
+                                                                    </div>                                                                                
+                                                                </div>                        
+                                                            <% } %>
+                                                        <% } %>
+                                                    </div>
+                                                <div id="noListing-at-center3">
+                                                    <p id="noListingText"></p>
+                                                </div>
+                                                <% if (!hasBookings) { %>
+                                                    <div class="noListing-at-center noListing-at-center2">
+                                                        <div class="noListing">
+                                                            <h6>No bookings requests <br>recived yet!</h6>
+                                                        </div>
+                                                    </div>
+                                                <% } %>     
+                                            </div>
+                                        </div>
+                                    </div>
+                                <% } %> 
+                            <% } %>
+                        </div>
+                    <% } %>                                
+                </div>
+            </div>         
+        </div>
+    <% } %>
+</div>
+
+<script>
+
+    // ALL, NEW, ACCEPTED AND DECLINED BOOKINGS SCRIPT
+    function bookingsView() {
+    const allBooking = document.getElementById('all-booking');
+    const newBooking = document.getElementById('new-booking');
+    const acceptedBooking = document.getElementById('accepted-booking');
+    const declinedBooking = document.getElementById('declined-booking');
+    const bookingCards = document.querySelectorAll('.all-data-of-booking-recived');
+    const noRequests = document.getElementById('noListing-at-center3');
+    const noListingText = document.getElementById('noListingText');
+
+    function resetTabStyles() {
+        allBooking.classList.remove("class-adding-for-new-accepted-declined-bookings");;
+        newBooking.classList.remove("class-adding-for-new-accepted-declined-bookings");;
+        acceptedBooking.classList.remove("class-adding-for-new-accepted-declined-bookings");;
+        declinedBooking.classList.remove("class-adding-for-new-accepted-declined-bookings");;
+    }
+
+    allBooking.addEventListener("click", () => {
+        bookingCards.forEach(card => {
+            card.style.display = 'block'; // Show all bookings
+        });
+        resetTabStyles();
+        allBooking.classList.add("class-adding-for-new-accepted-declined-bookings"); // Highlight active tab
+    });
+
+    newBooking.addEventListener("click", () => {
+        bookingCards.forEach(card => {
+            if (card.dataset.status == "2") {
+                card.style.display = 'block'; // Show pending (new) bookings
+                noRequests.classList.remove("noListing-at-center3");
+            } else {
+                card.style.display = 'none'; // Hide others
+                noRequests.classList.add("noListing-at-center3");
+                noListingText.innerText = 'No new bookings recived yet!'
+            }
+        });
+        resetTabStyles();
+        newBooking.classList.add("class-adding-for-new-accepted-declined-bookings"); // Highlight active tab
+    });
+
+    acceptedBooking.addEventListener("click", () => {
+        bookingCards.forEach(card => {
+            if (card.dataset.status == "0") {
+                card.style.display = 'block'; // Show accepted bookings
+                noRequests.classList.remove("noListing-at-center3");
+            } else {
+                card.style.display = 'none'; // Hide others
+                noRequests.classList.add("noListing-at-center3");
+                noListingText.innerText = 'No bookings accepted yet!'
+            }
+        });
+        resetTabStyles();
+        acceptedBooking.classList.add("class-adding-for-new-accepted-declined-bookings"); // Highlight active tab
+    });
+
+    declinedBooking.addEventListener("click", () => {
+        bookingCards.forEach(card => {
+            if (card.dataset.status == "1") {
+                card.style.display = 'block'; // Show declined bookings
+                noRequests.classList.remove("noListing-at-center3");
+            } else {
+                card.style.display = 'none'; // Hide others
+                noRequests.classList.add("noListing-at-center3");
+                noListingText.innerText = 'No bookings declined yet!'
+            }
+        });
+        resetTabStyles();
+        declinedBooking.classList.add("class-adding-for-new-accepted-declined-bookings"); // Highlight active tab
+    });
+}
+
+</script>

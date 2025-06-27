@@ -1,0 +1,94 @@
+<!-- PROFILE INFORMATION -->
+<div class="profile-info card col-lg-4 col-md-12 col-sm-12">
+    <!-- USER PROFILE IMAGE AND EDIT BUTTION -->
+    <div class="profile-image-and-edit-button">
+        <img class="card-img-top my-profile-img" 
+        <% if(profile.image.url) { %>
+            src=<%= profile.image.url %>
+        <% } else { %>
+                src="https://res.cloudinary.com/dgis4em6o/image/upload/v1731858468/wanderlust_DEV/gywagxuz6aveyiohjbfq.png"
+        <% } %>
+        >
+        <a href="/profile/edit/<%= currUser.id %>" class="edit-user-link">
+            <div class="edit-user-btn">
+                <i class="fa-solid fa-pen"></i>
+            </div>
+        </a>
+    </div>
+    
+    <div class="user-text-info">
+
+        <!-- USER NAME, EMAIL, CONTACT AND BIO -->
+        <div class="profile-name-email-contact-bio">
+            <h2><%= profile.username %></h2>
+            <p class="card-text"><%= profile.email %></p>
+            <% if(!profile.ownerContact) { %>
+                <p class="card-text text-black-50">Add your contact</p>
+            <% } else { %>
+                <p class="card-text"><%= profile.ownerContact %></p>
+            <% } %>
+            <% if(!profile.ownerBio) { %>
+                <p class="card-text text-black-50">Add some <br>Eye-catching bio</p>
+            <% } else { %>
+                <p class="card-text"><%= profile.ownerBio %></p>
+            <% } %>                    
+        </div>
+
+        <!-- LISTING AND BOOKING STATS FOR PROFILE -->
+        <div class="listing-statistics">
+            <div class="num-listing">
+                <div class="listing-count">
+                    <p><%= userListingCount %><br><p class="count-name">Listings Hosted</p></p>
+                </div>
+                <div class="booking-requests-count">
+                    <% if(receivedBookingsCount > 0) { %>
+                        <p><%= receivedBookingsCount %><br><p class="count-name">Bookings Recived</p></p>
+                    <% } else { %>
+                        <p>0<br>Booking Recived</p>
+                    <% } %>
+                </div>
+                <div class="upcoming-bookings-count">
+                    <p><%= myBookings %><br><p class="count-name">My Bookings</p></p>
+                </div>
+            </div>
+            <br>                    
+        </div>
+
+        <!-- SWITCH AND CURRENT VIEW -->
+        <div class="switch-host-btn">
+            <button type="button" onclick="switchView()" id="switch-btn" class="pink-btn btn">Switch to Host</button>
+            <p id="switch-view-subheading">Currently viewing as Guest</p>
+        </div>
+
+    </div>
+</div>
+
+<script>
+    // Initial state
+   let isHostView = false;
+
+    function switchView() {
+        const myBookings = document.getElementById('my-bookings-for-other-listings');
+        const myListings = document.getElementById('my-hosted-listings');
+        const switchBtn = document.getElementById('switch-btn');
+        const switchViewSubheading = document.getElementById('switch-view-subheading');
+
+        // Toggle visibility
+        if (isHostView) {
+            // Show guest bookings and hide host listings
+            myListings.style.display = 'none';
+            myBookings.style.display = 'inline';
+            switchBtn.textContent = 'Switch to Host';
+            switchViewSubheading.textContent = 'Currently viewing as Guest'
+        } else {
+            // Show host listings and hide guest bookings
+            myListings.style.display = 'inline';
+            myBookings.style.display = 'none';
+            switchBtn.textContent = 'Switch to Guest';
+            switchViewSubheading.textContent = 'Currently viewing as Host'
+        }
+
+        // Toggle state
+        isHostView = !isHostView;
+    }
+</script>

@@ -1,0 +1,85 @@
+<!-- BOILERPLATE FOR NAVBAR, BODY AND FOOTER -->
+<% layout("/layouts/boilerplate") %>
+<%- include("../includes/filter.ejs"); %>
+<%- include("../includes/flash.ejs") %>
+
+
+<div class="container">
+    <div class="row row-cols-lg-4 row-cols-md-3 row-cols-sm-1 mt-2 listing-container">
+    
+        <!-- FOR LOOP TO ITERATE EACH LISTING -->
+        <% for(let listing of allListings) { %>
+            <% if ((!category || listing.category == category || category === "Trending") && (!minPriceRange || (listing.price >= minPriceRange && listing.price <= maxPriceRange))) { %>
+    
+                <% let avgReviewArr = [] %>
+                <% for(review of listing.reviews) { %>
+                    <% avgReviewArr.push(review.rating) %>                                     
+                <% } %>
+
+                <!-- Calculate and display the average rating -->
+                <% let sum = avgReviewArr.reduce((a, b) => a + b, 0); %>
+                <% let average = (avgReviewArr.length > 0) ? (sum / avgReviewArr.length).toFixed(2) : 0; %>
+    
+                <a href="/listings/<%= listing._id %>" class="listing-link">
+                    <div class="card col listing-card-of-index">
+                        <div class="card-img-top position-relative carousel-wrapper">
+
+                            <!-- Bootstrap Carousel -->
+                            <div id="carousel<%= listing._id %>" class="carousel slide listing-carousel" data-bs-interval="1000" data-bs-pause="false">
+                                
+                                <!-- Indicators -->
+                                <div class="carousel-indicators">
+                                    <% for(let i = 0; i < listing.image.length; i++) { %>
+                                        <button type="button" data-bs-target="#carousel<%= listing._id %>" data-bs-slide-to="<%= i %>" class="<%= i === 0 ? 'active' : '' %>" aria-current="<%= i === 0 ? 'true' : 'false' %>" aria-label="Slide <%= i+1 %>"></button>
+                                    <% } %>
+                                </div>
+
+                                <!-- Slides -->
+                                <div class="carousel-inner">
+                                    <% for(let i = 0; i < listing.image.length; i++) { %>
+                                        <div class="carousel-item <%= i === 0 ? 'active' : '' %>">
+                                            <img src="<%= listing.image[i].url %>" class="d-block w-100" alt="listing_image" style="height: 20rem; object-fit: cover;">
+                                        </div>
+                                        <div class="card-img-overlay"></div>
+                                        <% if(sum >= 15 && average >= 4.00 && average <= 5.00) { %>
+                                            <div class="guest-fav">
+                                                <p>Guest favourite</p>
+                                            </div>
+                                        <% } %>
+                                    <% } %>
+                                </div>
+
+                                <!-- Navigation Controls -->
+                                <button class="carousel-control-prev" type="button" data-bs-target="#carousel<%= listing._id %>" data-bs-slide="prev">
+                                    <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                                    <span class="visually-hidden">Previous</span>
+                                </button>
+                                <button class="carousel-control-next" type="button" data-bs-target="#carousel<%= listing._id %>" data-bs-slide="next">
+                                    <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                                    <span class="visually-hidden">Next</span>
+                                </button>
+                            </div>
+                        </div>
+
+                        <div class="card-body">
+                            <p class="card-text listing-name">
+                                <b><%= listing.title %>, <%= listing.address %></b>
+                            </p>
+                            <p class="card-text listing-owner-name">Hosted by <%= listing.owner.username %></p>
+                            <div class="price-rating">
+                                <% let priceWithTax = listing.price + listing.price * 0.18 %>
+                                <p class="only-price-without-tax">&#8377; <%= listing.price.toLocaleString("en-IN") %> / night</p>
+                                <p class="only-price-with-tax">&#8377; <%= priceWithTax.toLocaleString("en-IN") %> / night &nbsp;&nbsp;&nbsp;(18% GST included)</p>
+                                <% if(average > 0 ) { %>
+                                    <p class="average-rating card-text">
+                                        <%= average %> <i class="fa-solid fa-star"></i>
+                                    </p>
+                                <% } %>
+                            </div>
+                        </div>
+                    </div>
+                </a>
+            <% } %>
+        <% } %>
+    </div>
+</div>

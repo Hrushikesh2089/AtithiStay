@@ -1,0 +1,138 @@
+<!-- REVIEW CARD -->
+<div class="col-sm-12 col-md-10 col-lg-8 offset-sm-0 offset-md-1 offset-lg-2">
+    <hr>
+    <% if(currUser) { %>
+        <h4 class="mt-4"><b>Leave a Review</b></h4>
+
+    <!-- REVIEW FORM -->
+    <form action="/listings/<%= listing.id %>/reviews" method="POST" novalidate class="needs-validation">
+
+        <div class="mt-3">
+            <label for="rating" class="form-label">Rating</label>
+            <fieldset class="starability-slot">
+                <input type="radio" id="no-rate" class="input-no-rate" name="review[rating]" value="1" checked aria-label="No rating." />
+                <input type="radio" id="first-rate1" name="review[rating]" value="1" />
+                <label for="first-rate1" title="Terrible">1 star</label>
+                <input type="radio" id="first-rate2" name="review[rating]" value="2" />
+                <label for="first-rate2" title="Not good">2 stars</label>
+                <input type="radio" id="first-rate3" name="review[rating]" value="3" />
+                <label for="first-rate3" title="Average">3 stars</label>
+                <input type="radio" id="first-rate4" name="review[rating]" value="4" />
+                <label for="first-rate4" title="Very good">4 stars</label>
+                <input type="radio" id="first-rate5" name="review[rating]" value="5" />
+                <label for="first-rate5" title="Amazing">5 stars</label>
+            </fieldset>
+        </div>
+
+        <div class="mb-3">
+            <label for="comment">Comments</label>
+            <textarea name="review[comment]" id="comment" cols="30" rows="5" class="form-control" required></textarea>
+            <div class="invalid-feedback">Please submit some comments for review</div>
+        </div>
+
+        <button class="btn btn-outline-dark mb-3">Submit</button>
+    </form>
+    <hr>
+    <% } %>
+
+    <!-- ALL REVIEWS -->
+    <div class="all-reviews p-1">
+        <% if(listing.reviews.length > 0 ) { %> 
+            <h4 class="mt-2"><b>All Reviews</b></h4>
+            <div class="row initial-reviews-wrap mt-3" id="initial-reviews">
+                <% listing.reviews.slice().reverse().slice(0, 8).forEach((review) => { %>
+                    <div class="card pt-3 ps-3 pe-3 pb-3 mb-3 ms-2 me-2 each-reviews">
+                        <div class="card-body">
+
+                            <!-- REVIEW AUTHOR DETAILS -->
+                            <div class="review-author-image-name-and-delete">
+                                <div class="review-author-image-and-name">
+                                    <img class="card-img me-2" alt="host_image"
+                                    <% if(review.author.image.url) { %>
+                                        src=<%= review.author.image.url %>
+                                    <% } else { %>
+                                            src="https://res.cloudinary.com/dgis4em6o/image/upload/v1731858468/wanderlust_DEV/gywagxuz6aveyiohjbfq.png"
+                                    <% } %>
+                                    >
+                                    <h5 class="card-title mt-2"><%= review.author.username %></h5>
+                                </div>
+                                <div class="review-delete-button">
+                                    <% if (currUser && currUser._id.toString() === review.author._id.toString()) { %>
+                                        <form class="mb-3" method="POST" action="/listings/<%= listing._id %>/reviews/<%= review._id %>?_method=DELETE">
+                                            <button class="btn btn-sm"><u>Delete review</u></button>
+                                        </form>
+                                    <% } %>
+                                </div>
+                            </div>
+                            
+                            <!-- RATING STARS -->
+                            <div class="review-stars-and-created-date">
+                                <p class="starability-result card-text mt-3" data-rating="<%= review.rating %>"><%= review.rating %></p>
+                                <p class="card-text mt-3 review-date"><%= new Date(review.createdAt).toLocaleDateString('en-GB') %></p>
+                            </div>
+
+                            <!-- SHOW MORE COMMENT -->
+                            <p class="card-text review-comment" id="review-comment-<%= review._id %>"><%= review.comment %></p>
+                            <% if (review.comment.split(' ').length > 15) { %>
+                                <u><b><p class="toggle-review" onclick="toggleReview('<%= review._id %>')">Show more</p></b></u>
+                            <% } %>
+
+                        </div>
+                    </div>
+                <% }) %>
+
+                <!-- SHOW MORE REVIEWS -->
+                <% if(listing.reviews.length > 8) { %>
+                    <button id="show-more-reviews" class="btn btn-outline-dark mb-3">Show More Reviews</button>
+                <% } %>
+            </div>
+
+            <!-- REMAINING REVIEWS IN SHOW MORE -->
+            <div class="row remaining-reviews-wrap" id="remaining-reviews" style="display: none;">
+                <% listing.reviews.slice().reverse().slice(8).forEach((review) => { %>
+                    <div class="card pt-3 ps-3 pe-3 pb-3 mb-3 ms-2 me-2 each-reviews">
+                        <div class="card-body">
+                            <div class="review-author-image-name-and-delete">
+
+                                <!-- REVIEW AUTHOR DETAILS -->
+                                <div class="review-author-image-and-name">
+                                    <img class="card-img me-2" alt="host_image"
+                                    <% if(review.author.image.url) { %>
+                                        src=<%= review.author.image.url %>
+                                    <% } else { %>
+                                            src="https://res.cloudinary.com/dgis4em6o/image/upload/v1731858468/wanderlust_DEV/gywagxuz6aveyiohjbfq.png"
+                                    <% } %>
+                                    >
+                                    <h5 class="card-title mt-2"><%= review.author.username %></h5>
+                                </div>
+                                <div class="review-delete-button">
+                                    <% if (currUser && currUser._id.toString() === review.author._id.toString()) { %>
+                                        <form class="mb-3" method="POST" action="/listings/<%= listing._id %>/reviews/<%= review._id %>?_method=DELETE">
+                                            <button class="btn btn-sm"><u>Delete review</u></button>
+                                        </form>
+                                    <% } %>
+                                </div>
+                            </div>
+
+                            <!-- RATING STARS -->
+                            <div class="review-stars-and-created-date">
+                                <p class="starability-result card-text mt-3" data-rating="<%= review.rating %>"><%= review.rating %></p>
+                                <p class="card-text mt-3 review-date"><%= new Date(review.createdAt).toLocaleDateString('en-GB') %></p>
+                            </div>
+
+                            <!-- SHOW MORE COMMENT -->
+                            <p class="card-text review-comment" id="review-comment-<%= review._id %>"><%= review.comment %></p>
+                            <% if (review.comment.split(' ').length > 15) { %>
+                                <u><b><p class="toggle-review" onclick="toggleReview('<%= review._id %>')">Show more</p></b></u>
+                            <% } %>
+                        </div>
+                    </div>
+                <% }) %>
+                <div class="mt-3">
+                    <button id="show-less-reviews" class="btn btn-outline-dark mb-3">Show Less Reviews</button>
+                </div>
+            </div>
+            <hr>
+        <% } %>
+    </div>
+</div>

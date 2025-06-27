@@ -1,0 +1,287 @@
+<!-- TITLE AND AVERAGE RATTING -->
+<div class="col-sm-12 col-md-10 col-lg-8 offset-sm-0 offset-md-1 offset-lg-2 show-listing-title">
+    <h3 class="col-10"><%= listing.title %></h3>
+    <% if(average > 0 ) { %>
+        <p class="average-rating card-text col-2 pe-2"><b><%= average %> 
+            <i class="fa-solid fa-star"></i>
+        </b></p>
+    <% } %>
+</div>
+
+<!-- LISTING INFORMATION CARD -->
+<div class="card col-sm-12 col-md-10 col-lg-8 offset-sm-0 offset-md-1 offset-lg-2 show-card listing-card">
+    <div class="row show-images pe-2">
+        <% if(listing.image[0] && !listing.image[1] && !listing.image[2]) { %>
+            <div class="col-12 show-img-verti">
+                <img src="<%= listing.image[0].url %>" class="card-img-top" style="height: 350px;" alt="listing_image">
+            </div>
+        <% } else if(listing.image[0] && listing.image[1] && !listing.image[2]) { %>
+            <div class="col-6 show-img-verti">
+                <img src="<%= listing.image[0].url %>" class="card-img-top show-img1" style="height: 350px;" alt="listing_image">
+            </div>
+            <div class="col-6 show-img-hori">
+                <img src="<%= listing.image[1].url %>" class="card-img-top show-img2-full-length" style="height: 350px;" alt="listing_image">
+            </div>
+        <% } else if(listing.image[0] && listing.image[1] && listing.image[2]){ %>
+            <div class="col-8 show-img-verti">
+                <img src="<%= listing.image[0].url %>" class="card-img-top show-img1" style="height: 350px;" alt="listing_image">
+            </div>
+            <div class="col-4 show-img-hori">
+                <img src="<%= listing.image[1].url %>" class="card-img-top show-img2" style="height: 350px;" alt="listing_image">
+                <img src="<%= listing.image[2].url %>" class="card-img-top show-img3" style="height: 350px;" alt="listing_image">
+            </div>
+        <% } %>
+    </div>
+
+    <!-- LISTING INFORMATION -->
+    <div class="listing-info col-12">
+        <div class="card-body info-box col=lg-6 col-md-12 col-sm-12 ">
+            <div class="loc-guest-reviewcount mb-2">
+
+                <h5><b>Entire home in <%= listing.address %>, <%= listing.country %></b></h5>
+                <p class="max-guest-allowed">Maximum <%= listing.maxguests %> guests allowed</p>
+
+                <!-- RATING AVERAGE -->
+                <% if(average < 4.00) { %>
+                    <p class="mb-4">
+                        <span>
+                            <i class="fa-solid fa-star"></i>&nbsp;<b><%= average %></b>&nbsp;&nbsp;<b>·</b>&nbsp;&nbsp;
+                        </span>
+                        <span>
+                            <u><b>
+                                <%= listing.reviews.length %>
+                                <% if(listing.reviews.length <= 1) { %>
+                                    Review
+                                <% } else { %>
+                                    Reviews
+                                <% } %>
+                            </b></u>
+                        </span>
+                    </p>
+                <% } %>
+
+                <!-- RATING WITH SILVER WREATH LAUREL -->
+                <% if(sum >= 15 && average >= 4.00 && average <= 4.50) { %>
+                    <div class="guest-favourite mt-4 p-3">
+                        <div class="guest-fav-with-wreath-laurel-and-most-loved">
+                            <div class="guest-fav-with-wreath-laurel">
+                                <img class="wreath-laurel" src="https://res.cloudinary.com/dgis4em6o/image/upload/v1735453736/wanderlust_DEV/ziuzt2vvvwpbfhyeivc0.avif" alt="wreath_laurel_black_left">
+                                <b><p class="guest-favourite-text black-favourite">Guest <br>favourite</p></b>
+                                <img class="wreath-laurel " src="https://res.cloudinary.com/dgis4em6o/image/upload/v1735453752/wanderlust_DEV/iba4yyty2vemm5bj4ayd.avif" alt="wreath_laurel_black_right">
+                            </div>
+                            <p class="guest-fav-most-loved"><b>Most loved home <br>on AtithiStay</b></p>
+                            <p class="guest-fav-most-loved2"><b>Most loved <br>home</b></p>
+                        </div>
+                        <p><b><%= average %></b><b class="guest-fav-rating"><br>Rating</b></p>
+                        <p>
+                            <b>
+                            <%= listing.reviews.length %></b><br>
+                            <b class="guest-fav-reviews">
+                            <% if(listing.reviews.length <= 1) { %>
+                                <u>Review</u>
+                            <% } else { %>
+                                <u>Reviews</u>
+                            <% } %>
+                            </b>
+                        </p>
+                    </div>
+                    
+                <!-- RATING WITH GOLDEN WREATH LAUREL -->
+                <% } else if(sum >= 15 && average >= 4.50 && average <= 5.00) { %>
+                    <div class="guest-favourite mt-4 p-3">
+                        <div class="guest-fav-with-wreath-laurel-and-most-loved">
+                            <div class="guest-fav-with-wreath-laurel">
+                                <img class="wreath-laurel" src="https://res.cloudinary.com/dgis4em6o/image/upload/v1735453870/wanderlust_DEV/r9azpwinqkodrtdnxrbs.avif" alt="wreath_laurel_gold_left">
+                                <b><p class="guest-favourite-text gold-favourite">Guest <br>favourite</p></b>
+                                <img class="wreath-laurel" src="https://res.cloudinary.com/dgis4em6o/image/upload/v1735453881/wanderlust_DEV/taxp8ndewhgoypwx9wbh.avif" alt="wreath_laurel_gold_right">
+                            </div>
+                            <p class="guest-fav-most-loved"><b>Amongs the top <br>most homes on AtithiStay</b></p>
+                            <p class="guest-fav-most-loved2"><b>Amongs the <br>top homes</b></p>
+                        </div>
+                        <p>
+                            <b><%= average %></b>
+                            <b class="guest-fav-rating"><br>Rating</b>
+                        </p>
+                        <p>
+                            <b><%= listing.reviews.length %></b><br>
+                            <b class="guest-fav-reviews">
+                            <% if(listing.reviews.length <= 1) { %>
+                                <u>Review</u>
+                            <% } else { %>
+                                <u>Reviews</u>
+                            <% } %>
+                            </b>
+                        </p>
+                    </div>
+                <% } else { %>
+                    <hr>
+                <% } %>
+            </div>
+
+            <!-- LISTING HOST DETAILS -->
+            <div class="host-name-image">
+                <img alt="host_image"
+                <% if(listing.owner.image.url) { %>
+                    src=<%= listing.owner.image.url %>
+                <% } else { %>
+                        src="https://res.cloudinary.com/dgis4em6o/image/upload/v1731858468/wanderlust_DEV/gywagxuz6aveyiohjbfq.png"
+                <% } %>
+                >
+                <div class="host-name-and-listings-owned">
+                    <p><h6><b>Hosted by <i><%= listing.owner.username %></i> at AtithiStay</b></h6></p>
+                    <p class="listings-hosted-by-host"><%= userListing.length %> Listings hosted</p>
+                </div>
+            </div>
+            <hr>
+
+            <!-- LISTING DESCRIPTION -->
+            <p class="card-text mt-4 listing-desc" id="listing-desc"><%= listing.description %></p>
+            <% if (listing.description.split(' ').length > 40) { %>
+                <u><b><p class="mb-4" id="toggleDescButton" onclick="toggleDesc()">Show more</p></b></u>
+            <% } %>
+            <hr>
+
+            <!-- LISTING AMENITIES -->
+            <div class="amenities mt-4 mb-4">
+                <h5><b>What this place offers</b></h5>
+                <div class="amenities-div-split listing-amenities" id="listing-amenities">
+                    <ul>
+                        <% listing.amenities.split(',').forEach(function(amenity) { %>
+                            <li><%= amenity.trim() %></li>
+                        <% }); %>
+                    </ul>
+                </div>
+                <% if (listing.amenities.split(',').length > 17) { %>
+                    <u><b><p class="mb-4" id="toggleAmenitiesButton" onclick="toggleAmenities()">Show more</p></b></u>
+                <% } %>
+            </div>
+
+            <!-- EDIT OR DELETE LISTING -->
+            <% if(listing.owner._id.equals(currUser._id)) { %>
+            <hr>
+            <div class="mt-4 owner-edit-and-delete-option">
+                <h5><b>You are the owner here!</b></h5>
+                <p>You can edit or delete this listing</p>                    
+                <div class="show-btns">
+        
+                    <!-- EDIT BUTTON -->
+                    <form action="/listings/<%=listing._id%>/edit">
+                        <button class="btn btn-dark pink-btn">Edit</button>
+                    </form>
+            
+                    <!-- DELETE BUTTON -->
+                    <form method="POST" action="/listings/<%=listing._id%>?_method=DELETE">
+                        <button class="btn btn-dark">Delete</button>
+                    </form>  
+
+                </div>
+            </div>
+            <% } %>
+        </div>
+
+        <!-- FORM FOR BOOKING DETAILS -->
+        <form action="/listings/reservepage/<%= listing._id %>" method="POST" class="col-12 col-lg-5">
+            <div class="price-box sticky-top col-12">
+                <div class="price-section1 col-12">
+                    <span class="listing-price">&#8377;<%= listing.price.toLocaleString("en-IN") %></span>
+                    <span> night</span>
+                        <div class="check-in-out-section col-12">
+
+                            <!-- DATES -->
+                            <div class="dates">
+                                <div class="check-in-date">
+                                    <p>CHECK-IN</p>
+                                    <input type="text" id="check-in" name="checkInDate" onchange="updateNights()" required>
+                                </div>
+                                <div class="check-out-date">
+                                    <p>CHECK-OUT</p>
+                                    <input type="text" id="check-out" name="checkOutDate" onchange="updateNights()" required>
+                                </div>
+                            </div>
+
+                            <!-- GUESTS -->
+                            <div class="guests col-12">
+                                <div class="total-guests" onclick="toggleGuestPopup()">
+                                    <div class="guest-title">
+                                        <span>GUESTS</span>
+                                        <p><span id="guest-count">1</span> guest</p>
+                                    </div>
+                                    <i class="fa-solid fa-chevron-down btn"></i>
+                                    
+                                </div>
+                                <div class="guest-num col-12" id="guest-popup">
+                                    <div class="guest">
+                                        <div class="adult-title">
+                                            <h6>Adults</h6>
+                                            <p>Age 13+</p>
+                                        </div>
+                                        <div class="range">
+                                            <span id="adults-count">1</span>
+                                            <input type="range" min="0" max="<%= listing.maxguests %>" id="adults" name="adults" value="1" oninput="updateGuestCount()" required>
+                                        </div>
+                                    </div>
+                                    <div class="guest">
+                                        <div class="children-title">
+                                            <h6>Childrens</h6>
+                                            <p>Age 2-12</span></p>
+                                        </div>
+                                        <div class="range">
+                                            <span id="children-count">0</span>
+                                            <input type="range" min="0" max="<%= listing.maxguests %>" id="children" name="childrens" value="0" oninput="updateGuestCount()">
+                                        </div>
+                                    </div>
+                                    <div class="close-guest-num-btn">
+                                        <p>Maximum <%= listing.maxguests %> guests are allowed here.</p>
+                                        <button type="button" class="btn" onclick="closeGuestPopup()">Close</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- RESERVE BUTTION -->
+                        <div class="reserve col-12">
+                            <button class="reserve-btn col-12" type="submit">Reserve</button>
+                        </div>
+                    </div>
+            
+                <div class="price-section2 col-12">
+
+                    <!-- PRICE FOR ALL NIGHTS -->
+                    <div class="pricing pay-price">
+                        <div class="price-comp">
+                            <span>&#8377;<%= listing.price.toLocaleString("en-IN") %></span>
+                            <span>&#215;</span>
+                            <span><span id="total-nights">1</span> night</span>
+                            <input type="hidden" name="total_Nights" id="totalNights">
+                        </div>
+                        <div class="price-to-pay">
+                            <span>&#8377;<span id="total-price"></span></span>
+                        </div>
+                    </div>
+
+                    <!-- SERVICE FEE -->
+                    <div class="pricing service-fee">
+                        <span>Service fees &nbsp;&nbsp;(10%)</span>
+                        <span>&#8377;<span id="service-fee">0</span></span>
+                        <input type="hidden" name="final_Service_Fee" id="finalServiceFee">
+                    </div>
+
+                    <!-- GST FEE -->
+                    <div class="pricing gst">
+                        <span>GST &nbsp;&nbsp;(18%)</span>
+                        <span>&#8377;<span id="gst-amount">0</span></span>
+                        <input type="hidden" name="final_Gst_Amount" id="finalGstAmount">
+                    </div>
+                    <hr>
+
+                    <!-- TOTAL PAYABLE AMOUNT -->
+                    <div class="pricing total-final-amount">
+                        <span>Total with taxes</span>
+                        <span>&#8377;<span id="final-total"></span></span>
+                        <input type="hidden" name="final_Payment_Amount" id="finalPaymentAmount">
+                    </div>
+                </div>                    
+            </div>
+        </form>                    
+    </div>
+</div>

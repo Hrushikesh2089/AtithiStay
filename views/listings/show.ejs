@@ -1,0 +1,264 @@
+<!-- THIS IS SHOW ROUTE WHICH DISPLAYS THE INFORMATION OF INDIVIDUAL LISTING AFTER CLICKING OVER IT -->
+
+<!-- BOILERPLATE FOR NAVBAR, BODY AND FOOTER -->
+<% layout("/layouts/boilerplate.ejs") %>
+<%- include("../includes/flash.ejs") %>
+
+<!-- VARIABLES -->
+<script>
+    const mapToken = "<%= process.env.MAP_TOKEN %>";
+    const longitude = "<%= longitude %>";
+    const latitude = "<%= latitude %>";
+    const popup_title = "<%= listing.title %>";
+    const popup_location = "<%= listing.address %>"
+    const pricePerNight = "<%= price %>"
+</script>
+
+<div class="container">
+
+    <div class="row mb-2 show-listing-card mt-3">
+
+        <%- include("show-listing-details.ejs") %>
+
+        <%- include("show-review-details.ejs") %>
+    
+        <%- include("show-map-details.ejs") %>
+        
+    </div>    
+</div>
+
+<!-- MAP SCRIPT -->
+<script src="/js/map.js"></script>
+
+<!-- OTHER SCRIPTS -->
+<script>
+
+    // TOGGLE DESCRIPTION
+    function toggleDesc() {
+        const desc = document.getElementById('listing-desc');
+        const p = document.getElementById('toggleDescButton');
+
+        if (desc.classList.contains('expanded')) {
+            desc.classList.remove('expanded');
+            p.textContent = 'Show more';
+        } else {
+            desc.classList.add('expanded');
+            p.textContent = 'Show less';
+        }
+    }
+
+    // TOGGLE AMENITIES
+    function toggleAmenities() {
+        const amenities = document.getElementById('listing-amenities');
+        const toogleAmenities = document.getElementById('toggleAmenitiesButton');
+
+        if (amenities.classList.contains('expanded')) {
+            amenities.classList.remove('expanded');
+            toogleAmenities.textContent = 'Show more';
+        } else {
+            amenities.classList.add('expanded');
+            toogleAmenities.textContent = 'Show less';
+        }
+    }
+
+    // TOOGLE REVIEW
+    function toggleReview(reviewId) {
+        const review = document.getElementById(`review-comment-${reviewId}`);
+        const toggleReview = review.nextElementSibling.querySelector('.toggle-review');
+
+        if (review.classList.contains('expanded')) {
+            review.classList.remove('expanded');
+            toggleReview.textContent = 'Show more';
+        } else {
+            review.classList.add('expanded');
+            toggleReview.textContent = 'Show less';
+        }
+    }
+
+    // GUEST POPUP
+    let guestPopup = document.getElementById("guest-popup");
+    function toggleGuestPopup() {
+        if (guestPopup.classList.contains("open-Guest-popup")) {
+            closeGuestPopup();
+        } else {
+            openGuestPopup();
+        }
+    }
+    function openGuestPopup() {
+        guestPopup.classList.add("open-Guest-popup");
+        document.addEventListener('click', closePopupOutsideClick);
+    }
+    function closeGuestPopup() {
+        guestPopup.classList.remove("open-Guest-popup");
+        document.removeEventListener('click', closePopupOutsideClick);
+    }
+    function closePopupOutsideClick(e) {
+        if (!guestPopup.contains(e.target) && !e.target.closest(".total-guests")) {
+            closeGuestPopup();
+        }
+    }
+
+    // UPDATE GUEST COUNT
+    function updateGuestCount() {
+        const maxGuests = "<%= listing.maxguests %>"; // Maximum guests allowed
+        const adults = document.getElementById("adults");
+        const children = document.getElementById("children");
+
+        const totalGuests = parseInt(adults.value) + parseInt(children.value);
+
+        // Adjust the maximum values dynamically
+        if (totalGuests > maxGuests) {
+            // If total exceeds maxGuests, reduce the value of the active slider
+            if (document.activeElement === adults) {
+                adults.value = maxGuests - parseInt(children.value);
+            } else if (document.activeElement === children) {
+                children.value = maxGuests - parseInt(adults.value);
+            }
+        }
+
+        // Update count displays for adults and children
+        document.getElementById("adults-count").textContent = adults.value;
+        document.getElementById("children-count").textContent = children.value;
+
+        // Update the displayed guest count
+        const updatedTotalGuests = parseInt(adults.value) + parseInt(children.value);
+        document.getElementById("guest-count").textContent = updatedTotalGuests;
+        document.getElementById("guest-count-summary").textContent = updatedTotalGuests;
+
+        // Update the price calculation
+        updateTotalPrice();
+    }
+
+    // SET DEFAULT DATES
+    function setDefaultDates() {
+        const checkInInput = document.getElementById("check-in");
+        const checkOutInput = document.getElementById("check-out");
+
+        const currentDate = new Date();
+        const checkInDate = currentDate.toISOString().split("T")[0]; // Format the date as yyyy-mm-dd
+        checkInInput.value = checkInDate;
+
+        const checkOutDate = new Date(currentDate);
+        checkOutDate.setDate(checkOutDate.getDate() + 1); // Add 5 days
+        checkOutInput.value = checkOutDate.toISOString().split("T")[0]; // Format the date
+
+        updateNights(); // Call updateNights to set the initial nights and prices
+    }
+
+    // UPDATTE NIGHTS
+    function updateNights() {
+        const checkIn = new Date(document.getElementById("check-in").value);
+        const checkOut = new Date(document.getElementById("check-out").value);
+
+        // Calculate the number of nights
+        const nights = (checkOut - checkIn) / (1000 * 60 * 60 * 24); // Convert ms to days
+        document.getElementById("total-nights").textContent = isNaN(nights) || nights <= 0 ? 1 : nights;
+        document.getElementById("totalNights").value = isNaN(nights) || nights <= 0 ? 1 : nights;
+
+        // Update the price calculation
+        updateTotalPrice();
+    }
+
+    // UPDATE TOTAL PRICE
+    function updateTotalPrice() {
+        const nights = parseInt(document.getElementById("total-nights").textContent);
+        const adults = parseInt(document.getElementById("adults").value);
+        const children = parseInt(document.getElementById("children").value);
+        const totalPrice = pricePerNight * nights;
+
+        // Round base price to integer
+        const roundedBasePrice = Math.round(totalPrice);
+        document.getElementById("total-price").textContent = roundedBasePrice.toLocaleString("en-IN");
+
+        // Round service fee and GST
+        const serviceFee = Math.round(roundedBasePrice * 0.1); // 10%
+        const gst = Math.round((roundedBasePrice + serviceFee) * 0.18); // 18%
+
+        document.getElementById("service-fee").textContent = serviceFee.toLocaleString("en-IN");
+        document.getElementById("finalServiceFee").value = serviceFee;
+
+        document.getElementById("gst-amount").textContent = gst.toLocaleString("en-IN");
+        document.getElementById("finalGstAmount").value = gst;
+
+        // Final total
+        const finalTotal = roundedBasePrice + serviceFee + gst;
+        document.getElementById("final-total").textContent = finalTotal.toLocaleString("en-IN");
+        document.getElementById("finalPaymentAmount").value = finalTotal;
+    }
+
+
+    // Set default check-in and check-out dates when the page loads
+    window.onload = setDefaultDates;
+</script>
+
+<!-- FLATPICKR CALENDER -->
+<script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
+
+<script>
+    // List of blocked dates
+    const newBlockedDates = JSON.parse('<%- JSON.stringify(blockedDates) %>');
+    const today = new Date().toISOString().split('T')[0];
+
+    // Initialize Flatpickr for check-in
+    const checkInPicker = flatpickr("#check-in", {
+        dateFormat: "Y-m-d",
+        disable: newBlockedDates, // Disable blocked dates
+        minDate: today,
+        onChange: function (selectedDates, dateStr) {
+            // Update the check-out field's minDate dynamically
+            checkOutPicker.set("minDate", dateStr);
+
+            // Calculate the next day
+            const nextDate = new Date(selectedDates[0]);
+            nextDate.setDate(nextDate.getDate() + 1); // Add one day
+
+            // Set the value of check-out to the next date
+            checkOutPicker.setDate(nextDate);
+        },
+        onDayCreate: function (dObj, dStr, fp, dayElem) {
+            // Highlight blocked dates
+            const date = dayElem.dateObj.toISOString().split("T")[0];
+            if (newBlockedDates.includes(`"${date}"`)) { // Check with quotes
+                dayElem.style.backgroundColor = "#ffcccc"; // Highlight color
+                dayElem.style.color = "#ff0000"; // Text color for visibility
+                dayElem.style.pointerEvents = "none"; // Make it unclickable (optional)
+            }
+        }
+    });
+
+    // Initialize Flatpickr for check-out
+    const checkOutPicker = flatpickr("#check-out", {
+        dateFormat: "Y-m-d",
+        disable: newBlockedDates, // Disable blocked dates
+        minDate: today, // Default minDate is today; updated dynamically based on check-in
+        onDayCreate: function (dObj, dStr, fp, dayElem) {
+            // Highlight blocked dates
+            const date = dayElem.dateObj.toISOString().split("T")[0];
+            if (newBlockedDates.includes(`"${date}"`)) { // Check with quotes
+                dayElem.style.backgroundColor = "#ffcccc"; // Highlight color
+                dayElem.style.color = "#ff0000"; // Text color for visibility
+                dayElem.style.pointerEvents = "none"; // Make it unclickable (optional)
+            }
+
+            // Highlight the minDate
+            const minDate = fp.config.minDate.toISOString().split("T")[0]; // Convert minDate to string
+            if (date === minDate) {
+                dayElem.style.backgroundColor = "#569ff7"; // Highlight color for minDate
+                dayElem.style.color = "#ffffff"; // Text color for minDate
+            }
+        }
+    });
+
+    // JavaScript to handle the "Show More Reviews" button
+    document.getElementById('show-more-reviews')?.addEventListener('click', () => {
+        document.getElementById('remaining-reviews').style.display = 'flex';
+        document.getElementById('show-more-reviews').style.display = 'none';
+    });
+
+    // JavaScript to handle the "Show Less Reviews" button
+    document.getElementById('show-less-reviews')?.addEventListener('click', () => {
+        document.getElementById('remaining-reviews').style.display = 'none';
+        document.getElementById('show-more-reviews').style.display = "block";
+    });
+
+</script>
