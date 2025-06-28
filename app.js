@@ -134,6 +134,10 @@ app.use("/", userRouter);
 // USING BOOKING ROUTES
 app.use("/profile", bookingRouter);
 
+// Redirect root to /listings
+app.get("/", (req, res) => {
+    res.redirect("/listings");
+});
 
 // EASYCRON FOR EXPIRED BOOKING CLEANING
 const deleteExpiredBookings = require("./cronJobs/bookingCleaner");
