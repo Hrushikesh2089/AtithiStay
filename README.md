@@ -33,3 +33,14 @@
 - View incoming booking requests
 - Accept or reject bookings
 
+---
+
+---
+
+## 👨‍💻 Developed By
+
+**Hrushikesh Kale**  
+B.Tech CSE (AI) | G H Raisoni College of Engineering and Management, Pune  
+💻 Full Stack Developer | 🤖 Machine Learning Enthusiast  
+🌐 [LinkedIn](https://www.linkedin.com/in/hrushikesh-kale-6a3490335/) • [GitHub](https://github.com/Hrushikesh2089)
+
