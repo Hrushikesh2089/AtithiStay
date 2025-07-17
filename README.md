@@ -35,8 +35,6 @@
 
 ---
 
----
-
 ## 👨‍💻 Developed By
 
 **Hrushikesh Kale**  
