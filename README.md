@@ -2,11 +2,13 @@
 
 **Atithistay** is a Resort/Villa booking Web application that allows Resort owners to host their properties and customers to browse, book, and manage stays. The platform includes real-time booking system, payment system, resort management, and a clean, user-friendly interface for both hosts and guests.
 
+---
 
 ## 🌐 Live Demo
 
 🔗 [Click here to visit Atithistay](https://atithistay-by-hrushi.onrender.com)
 
+---
 
 ## 🚀 Tech Stack
 
@@ -15,6 +17,7 @@
 - **Database**: MongoDB
 - **Templating Engine**: EJS
 
+---
 
 ## 🔑 Key Features
 
